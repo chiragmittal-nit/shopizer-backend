@@ -1,10 +1,11 @@
-import express from "express";
-import cors from "cors";
-import mongoose from "mongoose";
+import express from 'express';
+import cors from 'cors';
 
-import ProductRouter from "./routes/product.js";
+import productRouter from './routes/product.js';
+import userRouter from './routes/user.js';
+import authRouter from './routes/auth.js';
 
-import "./db.js";
+import './db.js';
 
 const app = express();
 
@@ -14,7 +15,9 @@ app.use(express.urlencoded({ extended: true }));
 
 // app.get("/", (req, res) => res.send("hello world"));
 
-app.use("/api/products", ProductRouter);
+app.use('/api/products', productRouter);
+app.use('/api/auth', authRouter);
+app.use('/api/users', userRouter);
 
 app.listen(process.env.PORT, () =>
   console.log(`Server running at http://127.0.0.1:${process.env.PORT}`)
