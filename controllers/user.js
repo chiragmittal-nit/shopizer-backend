@@ -43,22 +43,28 @@ export const registerUser = (req, res) => {
 };
 
 export const loginUser = (req, res) => {
-  console.log(req.body);
+  // console.log('-----------------------login request body : ', req.body);
   const user = new User(_.pick(req.body, ['email', 'password']));
 
   User.findOne({ email: user.email })
     .then((data) => {
-      if (!data) return res.status(400).send('Invalid email or password.');
+      if (!data) return res.status(400).send('Invalid Credentials');
 
       bcrypt
         .compare(user.password, data.password)
         .then((isValid) => {
-          if (!isValid)
-            return res.status(400).send('Invalid email or password.');
+          if (!isValid) return res.status(400).send('Invalid Credentials');
+          user.name = data.name;
           const token = user.generateAuthToken();
           res.send(token);
         })
-        .catch((err) => res.status(500).send(err.message));
+        .catch((err) => {
+          console.log(err);
+          return res.status(400).send(err.message);
+        });
     })
-    .catch((err) => res.status(400).send(err.message));
+    .catch((err) => {
+      console.log(err);
+      return res.status(400).send(err.message);
+    });
 };

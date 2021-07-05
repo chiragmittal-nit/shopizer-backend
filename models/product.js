@@ -27,7 +27,11 @@ const ProductSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
-    review: [reviewSchema],
+    imageUrl: {
+      type: String,
+      required: true,
+    },
+    reviews: [reviewSchema],
   },
   {
     timestamps: true,

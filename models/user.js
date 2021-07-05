@@ -5,7 +5,6 @@ const userSchema = mongoose.Schema({
   name: {
     type: String,
     required: true,
-    // match: /[a-zA-z0-9]{2,30}@[a-zA-Z]{3,20}\.[a-zA-Z]{2,6}(\.[a-zA-Z]{2,6})*/,
   },
   email: {
     type: String,

@@ -4,6 +4,7 @@ import cors from 'cors';
 import productRouter from './routes/product.js';
 import userRouter from './routes/user.js';
 import authRouter from './routes/auth.js';
+import orderRouter from './routes/order.js';
 
 import './db.js';
 
@@ -18,6 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/products', productRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/users', userRouter);
+app.use('/api/orders', orderRouter);
 
 app.listen(process.env.PORT, () =>
   console.log(`Server running at http://127.0.0.1:${process.env.PORT}`)
