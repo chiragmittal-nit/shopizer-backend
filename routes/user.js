@@ -1,5 +1,5 @@
 import express from 'express';
-import { registerUser } from '../controllers/user.js';
+import { registerUser, updateUserDetails } from '../controllers/user.js';
 import { auth } from '../middleware/auth.js';
 
 const router = express.Router();
@@ -9,6 +9,7 @@ router.get('/me', [auth], (req, res) => {
 });
 
 router.post('/', registerUser);
+router.put('/', updateUserDetails);
 
 // router.put();
 
