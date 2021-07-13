@@ -10,7 +10,8 @@ export const getAllProducts = async (req, res) => {
 };
 
 export const addProductReview = async (req, res) => {
-  const { productId, review, currentUser: user } = req.body;
+  const productId = req.params.id;
+  const { review, currentUser: user } = req.body;
 
   try {
     const product = await Product.findById(productId);
@@ -34,5 +35,48 @@ export const addProductReview = async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(500).send('Internal Sever Error');
+  }
+};
+
+export const deleteProduct = async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    const deletedProduct = await Product.findOneAndDelete({ _id: id });
+    if (!deletedProduct)
+      return res.status(400).send("Such Product doesn't exits !!");
+    res.status(200).send(deletedProduct);
+  } catch (err) {
+    console.error(err);
+    res.status(400).send('Internal Server Error ');
+  }
+};
+
+export const addProduct = async (req, res) => {
+  try {
+    const newProduct = new Product({ ...req.body });
+    await newProduct.save();
+    res.status(200).send(newProduct);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send('Internal Sever Error');
+  }
+};
+
+export const updateProduct = async (req, res) => {
+  const id = req.params.id;
+  const product = req.body;
+
+  try {
+    const updatedProduct = await Product.findOneAndUpdate(
+      { _id: id },
+      { ...product },
+      { new: true }
+    );
+    console.log('updated Product : ', updatedProduct);
+    res.status(200).send(updatedProduct);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Internal Server Error !!');
   }
 };

@@ -50,14 +50,21 @@ export const placeOrder = async (req, res) => {
   }
 };
 
-export const getOrders = async (req, res) => {
+export const getOrdersByUserId = async (req, res) => {
   try {
-    let orders;
-    if (req.query.userId)
-      orders = await Order.find({ userId: req.query.userId });
-    else orders = await Order.find();
+    const orders = await Order.find({ userId: req.query.userId });
     res.status(200).send(orders);
   } catch (error) {
     res.status(500).send('Internal Server Error. !!');
+  }
+};
+
+export const getAllOrders = async (req, res) => {
+  try {
+    const allOrders = await Order.find();
+    res.send(allOrders);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Internal Server Error !!');
   }
 };

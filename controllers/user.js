@@ -41,13 +41,13 @@ export const loginUser = (req, res) => {
 
   User.findOne({ email: user.email })
     .then((data) => {
-      if (!data) return res.status(400).send('Invalid Credentials');
-
+      if (!data) return res.status(400).send('Invalid Credentials1');
       bcrypt
         .compare(user.password, data.password)
         .then((isValid) => {
-          if (!isValid) return res.status(400).send('Invalid Credentials');
+          if (!isValid) return res.status(400).send('Invalid Credentials2');
           user.name = data.name;
+          user.isAdmin = data.isAdmin;
           const token = user.generateAuthToken();
           res.send(token);
         })
@@ -63,6 +63,7 @@ export const loginUser = (req, res) => {
 };
 
 export const updateUserDetails = async (req, res) => {
+  const id = req.params.id;
   const updatedUser = req.body;
   try {
     const hashedPassword = await hashPassword(updatedUser.password);
@@ -70,8 +71,9 @@ export const updateUserDetails = async (req, res) => {
     const user = await User.findOneAndUpdate(
       { email: updatedUser.email },
       { name: updatedUser.name, password: hashedPassword },
-      { returnOriginal: false }
+      { new: true }
     );
+    console.log('updated User : ', user);
     res.status(200).send(user);
   } catch (err) {
     console.error(err);
@@ -91,4 +93,26 @@ export const hashPassword = (password) => {
       })
       .catch((err) => reject(err));
   });
+};
+
+export const getAllUsers = async (req, res) => {
+  try {
+    const allUsers = await User.find();
+    res.send(allUsers);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Internal Server Error !!');
+  }
+};
+
+export const deleteUser = async (req, res) => {
+  const id = req.params.id;
+  try {
+    const deletedUser = await User.findOneAndDelete({ _id: id });
+    return res.status(400).send("Such User doesn't exist !!");
+    res.send(deletedUser);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Internal Server Error ');
+  }
 };
